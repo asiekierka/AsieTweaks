@@ -6,9 +6,19 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Logger;
 
+import pl.asie.tweaks.api.ITweak;
 import pl.asie.tweaks.proxy.CommonProxy;
 import pl.asie.tweaks.record.RecordRegistry;
+import pl.asie.tweaks.tweaks.TweakAddHorseRecipes;
+import pl.asie.tweaks.tweaks.TweakCompatMetallurgyFoundry;
+import pl.asie.tweaks.tweaks.TweakOldBookRecipe;
+import pl.asie.tweaks.tweaks.TweakOpenBlocksNerf;
+import pl.asie.tweaks.tweaks.TweakReplaceMapAtlas;
+import pl.asie.tweaks.tweaks.TweakReworkCraftingTables;
+import pl.asie.tweaks.tweaks.TweakTConAlternateBrickRecipes;
+import pl.asie.tweaks.tweaks.TweakTConRemoveSmeltery;
 import pl.asie.tweaks.util.CraftingTweaker;
+import pl.asie.tweaks.util.CrossMod;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.Loader;
@@ -46,13 +56,6 @@ public class AsieTweaks {
 	public Configuration config;
 	public static Logger log;
 	public static RecordRegistry records;
-	public static HashMap<String, String[]> classNames = new HashMap<String, String[]>();
-	
-	static {
-		classNames.put("TConstruct", new String[]{"tconstruct.common.TContent"});
-		classNames.put("TMechworks", new String[]{"tmechworks.common.MechContent"});
-		classNames.put("BetterStorage", new String[]{"net.mcft.copy.betterstorage.content.Tiles", "net.mcft.copy.betterstorage.content.Items"});
-	}
 	
 	public static String skinURL, capeURL;
 	public static boolean forceTweakOverrides, disableFoodBar;
@@ -92,93 +95,60 @@ public class AsieTweaks {
 		if(System.getProperty("user.dir").indexOf(".asielauncher") >= 0) {
 			log.info("Hey, you! Yes, you! Thanks for using AsieLauncher! ~asie");
 		}
+
+		// Vanilla
+		addTweak(new TweakAddHorseRecipes());
+		addTweak(new TweakOldBookRecipe());
+		
+		// Compat tweaks
+		addTweak(new TweakCompatMetallurgyFoundry());
+
+		// Rework tweaks
+		addTweak(new TweakReplaceMapAtlas());
+		addTweak(new TweakReworkCraftingTables());
+		addTweak(new TweakTConAlternateBrickRecipes());
+		addTweak(new TweakTConRemoveSmeltery());
+		addTweak(new TweakOpenBlocksNerf());
 	}
 	
-	private ItemStack getItemStack(String modid, String name, int stackSize, int metadata) {
-		 if(classNames.containsKey(modid)) { // Use classNames
-			for(String classname: classNames.get(modid)) {
-				try {
-					Class klass = this.getClass().getClassLoader().loadClass(classname);
-					if(klass != null) {
-						Object o = klass.getField(name).get(null);
-						if(o instanceof Block) return new ItemStack((Block)o, stackSize, metadata);
-						else if(o instanceof Item) return new ItemStack((Item)o, stackSize, metadata);
-						else log.warning("Could not get right object for field " + name + " in class " + classNames.get(modid));
-					}
-				} catch(Exception e) { e.printStackTrace(); }
+	private ArrayList<ITweak> tweaks = new ArrayList<ITweak>();
+	
+	public void addTweak(ITweak tweak) {
+		if(tweak.isCompatible()) {
+			if(config.get("tweaks", tweak.getConfigKey(), tweak.getDefaultConfigOption()).getBoolean(tweak.getDefaultConfigOption())) {
+				log.info("Added tweak " + tweak.getClass().getName());
+				tweaks.add(tweak);
 			}
-			// We're still here!?
-			log.severe("Could not load class for mod " + modid + ", trying worst-case alternatives - PROBABLY BROKEN");
 		}
-		if(GameRegistry.findBlock(modid, name) != null)
-			return new ItemStack(GameRegistry.findBlock(modid, name), stackSize, metadata);
-		else if(GameRegistry.findItem(modid, name) != null)
-			return new ItemStack(GameRegistry.findItem(modid, name), stackSize, metadata);
-		else if(GameRegistry.findItemStack(modid, name, stackSize) != null) {
-			ItemStack stack = GameRegistry.findItemStack(modid, name, stackSize);
-			if(stack != null) stack.setItemDamage(metadata);
-			return stack;
+	}
+	
+	public void handleTweaksPostInit() {
+		List recipesOriginal = CraftingManager.getInstance().getRecipeList();
+		List recipes = new ArrayList(recipesOriginal);
+		
+		for(ITweak tweak: tweaks) {
+			tweak.onPreRecipe();
 		}
-		return null; // in case we already haven't
+		
+		// Remove or modify recipes
+		for (Iterator<Object> itr = recipes.iterator(); itr.hasNext();) {
+			Object o = itr.next();
+			if (!(o instanceof IRecipe)) continue;
+			IRecipe recipe = (IRecipe)o;
+			for(ITweak tweak: tweaks) {
+				if(tweak.onRecipe(recipesOriginal, recipe)) break; // Recipe has been removed.
+			}
+		}
+		
+		for(ITweak tweak: tweaks) {
+			tweak.onPostRecipe();
+		}
 	}
 	
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
 		NetworkRegistry.instance().registerConnectionHandler(new NetworkHandler());
-		
-		if(config.get("tweaks", "oldBookRecipe", false).getBoolean(false)) {
-			GameRegistry.addShapedRecipe(new ItemStack(Item.book), "x", "x", "x", 'x', Item.paper);
-		}
-		
-		if(Loader.isModLoaded("TMechworks") && config.get("tweaks", "tMechAlternateDrawbridgeRecipes", false).getBoolean(false)) {
-			GameRegistry.addRecipe(new ShapedOreRecipe(getItemStack("TMechworks", "redstoneMachine", 1, 0), false, new Object[]{"cpc", "tdt", "trt", 'c', "ingotCopper", 't', "ingotTin", 'p', new ItemStack(Block.pistonBase, 1), 'd', new ItemStack(Block.dispenser, 1), 'r', new ItemStack(Item.redstone, 1)}));
-			GameRegistry.addRecipe(new ShapedOreRecipe(getItemStack("TMechworks", "redstoneMachine", 1, 2), false, new Object[]{"ccc", "rdr", "ttt", 'c', "ingotCopper", 't', "ingotTin", 'r', new ItemStack(Item.redstone, 1), 'd', getItemStack("TMechworks", "redstoneMachine", 1, 0)}));
-		}
-		
-		if(Loader.isModLoaded("TConstruct") && config.get("tweaks", "tConSmeltForClearGlass", false).getBoolean(false)) {
-			GameRegistry.addSmelting(Block.glass.blockID, getItemStack("TConstruct", "clearGlass", 1, 0), 0.0F);
-		}
-		
-		if(Loader.isModLoaded("TConstruct") && config.get("tweaks", "tConAlternateBrickRecipes", false).getBoolean(false)) {
-			// Obsidian bricks
-			GameRegistry.addShapedRecipe(getItemStack("TConstruct", "multiBrick", 4, 0), "bb", "bb", 'b', new ItemStack(Block.obsidian, 1));
-			// Conversion between the two types
-			GameRegistry.addShapelessRecipe(getItemStack("TConstruct", "multiBrick", 1, 13), new Object[]{getItemStack("TConstruct", "multiBrick", 1, 0)});
-			GameRegistry.addShapelessRecipe(getItemStack("TConstruct", "multiBrick", 1, 0), new Object[]{getItemStack("TConstruct", "multiBrick", 1, 13)});
-			// Sandstone bricks
-			GameRegistry.addShapedRecipe(getItemStack("TConstruct", "multiBrick", 4, 1), "bb", "bb", 'b', new ItemStack(Block.sandStone, 1, 1));
-			// Iron bricks
-			GameRegistry.addShapedRecipe(getItemStack("TConstruct", "multiBrick", 4, 4), "bb", "bb", 'b', new ItemStack(Item.ingotIron, 1));
-			// Gold bricks
-			GameRegistry.addShapedRecipe(getItemStack("TConstruct", "multiBrick", 4, 5), "bb", "bb", 'b', new ItemStack(Item.ingotGold, 1));
-			// Lapis bricks
-			GameRegistry.addShapedRecipe(getItemStack("TConstruct", "multiBrick", 4, 6), "bb", "bb", 'b', new ItemStack(Item.dyePowder, 1, 4));
-			// Diamond bricks
-			GameRegistry.addShapedRecipe(getItemStack("TConstruct", "multiBrick", 4, 7), "bb", "bb", 'b', new ItemStack(Item.diamond, 1));
-			// Redstone bricks
-			GameRegistry.addShapedRecipe(getItemStack("TConstruct", "multiBrick", 4, 8), "bb", "bb", 'b', new ItemStack(Item.redstone, 1));
-			// Bone bricks
-			GameRegistry.addShapedRecipe(getItemStack("TConstruct", "multiBrick", 4, 9), "bb", "bb", 'b', new ItemStack(Item.bone, 1));
-			// Slime bricks
-			GameRegistry.addShapedRecipe(getItemStack("TConstruct", "multiBrick", 4, 11), "bb", "bb", 'b', getItemStack("TConstruct", "slimeGel", 1, 0));
-			GameRegistry.addShapedRecipe(getItemStack("TConstruct", "multiBrick", 4, 10), "bb", "bb", 'b', getItemStack("TConstruct", "slimeGel", 1, 1));
-			// Endstone bricks
-			GameRegistry.addShapedRecipe(getItemStack("TConstruct", "multiBrick", 4, 12), "bb", "bb", 'b', new ItemStack(Block.whiteStone, 1));
 
-			// Fancy versions
-			int maxFancy = 13;
-			for(int meta = 0; meta <= maxFancy; meta++) {
-				GameRegistry.addShapedRecipe(getItemStack("TConstruct", "multiBrickFancy", 4, meta), "bb", "bb", 'b', getItemStack("TConstruct", "multiBrick", 1, meta));
-			}
-			
-			// Stone roads and fancy stone bricks
-			GameRegistry.addShapedRecipe(getItemStack("TConstruct", "multiBrickFancy", 4, 15), "bb", "bb", 'b', new ItemStack(Block.stoneBrick, 1));
-			GameRegistry.addShapedRecipe(getItemStack("TConstruct", "multiBrickFancy", 4, 14), "bb", "bb", 'b', getItemStack("TConstruct", "multiBrickFancy", 1, 15));
-			
-			// Polished Stone brick - smelting of stone bricks
-			GameRegistry.addSmelting(Block.stoneBrick.blockID, getItemStack("TConstruct", "multiBrick", 1, 3), 0.0F);
-		}
-		
 		if(config.get("misc", "fixTraincraftRandomDamage", false).getBoolean(false)) {
 			MinecraftForge.EVENT_BUS.register(new TraincraftPatcher());
 		}
@@ -189,7 +159,10 @@ public class AsieTweaks {
 
 		LanguageRegistry lr = LanguageRegistry.instance();
 		lr.addStringLocalization("commands.skinreload.usage", "/skinreload [player]");
-		lr.addStringLocalization("tile.asietweaks.automaticcraftingstation.name", "Automatic Crafting Station");
+
+		for(ITweak tweak: tweaks) {
+			tweak.onInit();
+		}
 	}
 	
 	@EventHandler
@@ -199,45 +172,10 @@ public class AsieTweaks {
 			event.registerServerCommand(new CommandBlockInfo());
 	}
 	
-	public static void renameItemStack(ItemStack target, String name) {
-		if(target == null) return;
-		Item item = target.getItem();
-		item.setUnlocalizedName(name);
-		if(item instanceof ItemBlock) {
-			Block.blocksList[((ItemBlock)item).getBlockID()].setUnlocalizedName(name);
-		}
-	}
-	
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
-		boolean replaceWorkbenchWithCStation = Loader.isModLoaded("TConstruct") && config.get("tweaks", "tConUseCraftingStationAsWorkbench", false).getBoolean(false);
-		List recipesOriginal = CraftingManager.getInstance().getRecipeList();
-		List recipes = new ArrayList(recipesOriginal);
+		handleTweaksPostInit();
 		
-		// Remove or modify recipes
-		for (Iterator<Object> itr = recipes.iterator(); itr.hasNext();) {
-			Object o = itr.next();
-			if (!(o instanceof IRecipe)) continue;
-			IRecipe recipe = (IRecipe)o;
-			if(replaceWorkbenchWithCStation) {
-				if(!CraftingTweaker.removeOutputRecipe(recipesOriginal, recipe, new ItemStack(Block.workbench), true)) {
-					// Not removed
-					recipe = CraftingTweaker.replaceInRecipe(recipesOriginal, recipe, new ItemStack(Block.workbench),
-							getItemStack("TConstruct", "craftingStationWood", 1, 0), true);
-					recipe = CraftingTweaker.replaceInRecipe(recipesOriginal, recipe, "craftingTableWood",
-							getItemStack("TConstruct", "craftingStationWood", 1, 0), true);
-				}
-			}
-		}
-		
-		// Add recipes
-		if(replaceWorkbenchWithCStation)
-			GameRegistry.addRecipe(new ShapedOreRecipe(getItemStack("TConstruct", "craftingStationWood", 1, 0), "bb", "bb", 'b', "plankWood"));
-	
-		// Handle renaming
-		if(Loader.isModLoaded("betterstorage") && config.get("tweaks", "renameBetterStorageCraftStationAutomatic", false).getBoolean(false)) {
-			renameItemStack(getItemStack("betterstorage", "craftingStation", 1, 0), "asietweaks.automaticcraftingstation");
-		}
 		records.addDungeonLoot();
 		
 		// Initialize config entries used later
