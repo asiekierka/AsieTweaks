@@ -11,9 +11,11 @@ import pl.asie.tweaks.proxy.CommonProxy;
 import pl.asie.tweaks.record.RecordRegistry;
 import pl.asie.tweaks.tweaks.TweakAddHorseRecipes;
 import pl.asie.tweaks.tweaks.TweakCompatMetallurgyFoundry;
+import pl.asie.tweaks.tweaks.TweakCompatMetallurgyMekanism;
 import pl.asie.tweaks.tweaks.TweakExpensiveComputers;
 import pl.asie.tweaks.tweaks.TweakOldBookRecipe;
 import pl.asie.tweaks.tweaks.TweakOpenBlocksNerf;
+import pl.asie.tweaks.tweaks.TweakPatchTraincraftDamage;
 import pl.asie.tweaks.tweaks.TweakRemoveTurtles;
 import pl.asie.tweaks.tweaks.TweakReplaceMapAtlas;
 import pl.asie.tweaks.tweaks.TweakReworkCraftingTables;
@@ -52,7 +54,7 @@ import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
-@Mod(modid="asietweaks", name="AsieTweaks", version="0.1.0")
+@Mod(modid="asietweaks", name="AsieTweaks", version="0.1.0", dependencies="after:Metallurgy3Core")
 @NetworkMod(channels={"AsieTweaks"}, clientSideRequired=true, packetHandler=NetworkHandler.class)
 public class AsieTweaks {
 	public Configuration config;
@@ -85,9 +87,6 @@ public class AsieTweaks {
 		proxy.registerSounds();
 		
 		forceTweakOverrides = config.get("tweaks", "forceOverrides", false).getBoolean(false);
-
-		if(config.get("tweaks", "disableAchievements", false).getBoolean(false))
-			proxy.disableAchievements();
 		
 		config.addCustomCategoryComment("skin", "Functions related to the skin changing functionality. NOTE: The URL parameters are intended for roleplay and/or NPC servers.");
     	skinURL = config.get("skin", "skinURL", "http://skins.minecraft.net/MinecraftSkins/%s.png").getString();
@@ -104,7 +103,8 @@ public class AsieTweaks {
 		
 		// Compat tweaks
 		addTweak(new TweakCompatMetallurgyFoundry());
-
+		addTweak(new TweakCompatMetallurgyMekanism());
+		
 		// Rework tweaks
 		addTweak(new TweakReplaceMapAtlas());
 		addTweak(new TweakReworkCraftingTables());
@@ -113,6 +113,9 @@ public class AsieTweaks {
 		addTweak(new TweakOpenBlocksNerf());
 		addTweak(new TweakRemoveTurtles());
 		addTweak(new TweakExpensiveComputers());
+		
+		// Bugfix tweaks
+		addTweak(new TweakPatchTraincraftDamage());
 		
 		for(ITweak tweak: tweaks) {
 			tweak.onPreInit();
@@ -156,10 +159,6 @@ public class AsieTweaks {
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
 		NetworkRegistry.instance().registerConnectionHandler(new NetworkHandler());
-
-		if(config.get("misc", "fixTraincraftRandomDamage", false).getBoolean(false)) {
-			MinecraftForge.EVENT_BUS.register(new TraincraftPatcher());
-		}
 		
 		if(config.get("misc", "enableEssentialsShoutKey", false).getBoolean(false)) {
 			proxy.addShoutBinding();
