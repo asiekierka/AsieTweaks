@@ -15,7 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 
 public class ItemDirtyDust extends ItemMekanismBase {
-	private String[] textureNames = new String[256];
+	private String[] textureNames;
 	
 	public ItemDirtyDust(int id) {
 		super(id, "dirtyDust");

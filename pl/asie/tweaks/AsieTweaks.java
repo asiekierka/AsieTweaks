@@ -24,6 +24,7 @@ import pl.asie.tweaks.tweaks.TweakTConRemoveSmeltery;
 import pl.asie.tweaks.util.CraftingTweaker;
 import pl.asie.tweaks.util.CrossMod;
 import cpw.mods.fml.client.registry.RenderingRegistry;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
@@ -80,6 +81,8 @@ public class AsieTweaks {
 		log = Logger.getLogger("asietweaks");
 		log.setParent(FMLLog.getLogger());
 		
+		FMLCommonHandler.instance().registerCrashCallable(new CrashWarningCallable());
+
 		config = new Configuration(event.getSuggestedConfigurationFile());
 		config.load();
 		
@@ -122,7 +125,7 @@ public class AsieTweaks {
 		}
 	}
 	
-	private ArrayList<ITweak> tweaks = new ArrayList<ITweak>();
+	ArrayList<ITweak> tweaks = new ArrayList<ITweak>();
 	
 	public void addTweak(ITweak tweak) {
 		if(tweak.isCompatible()) {
