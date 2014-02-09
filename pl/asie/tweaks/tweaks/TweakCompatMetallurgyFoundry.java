@@ -19,7 +19,7 @@ import net.minecraftforge.fluids.FluidStack;
 import rebelkeithy.mods.metallurgy.api.IOreInfo;
 import rebelkeithy.mods.metallurgy.api.MetallurgyAPI;
 
-public class TweakCompatMetallurgyFoundry implements ITweak {
+public class TweakCompatMetallurgyFoundry extends ITweak {
 	private Fluid getFluid(String name) {
 		String fluidName = "molten." + name.toLowerCase().replace(' ', '.');
 		// Abuse behaviour: TiC-handled metals END with ".molten", not START, so those will return null
@@ -48,10 +48,6 @@ public class TweakCompatMetallurgyFoundry implements ITweak {
 	
 	public boolean isCompatible() {
 		return Loader.isModLoaded("ExtraTiC") && Loader.isModLoaded("Metallurgy3Core") && Loader.isModLoaded("foundry");
-	}
-	
-	public boolean onRecipe(List recipeList, IRecipe recipe) {
-		return false;
 	}
 	
 	public void onPostRecipe() {
@@ -93,13 +89,5 @@ public class TweakCompatMetallurgyFoundry implements ITweak {
 	@Override
 	public boolean getDefaultConfigOption() {
 		return true;
-	}
-
-	@Override
-	public void onPreRecipe() {
-	}
-
-	@Override
-	public void onInit() {
 	}
 }

@@ -8,33 +8,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import pl.asie.tweaks.api.ITweak;
 
-public class TweakAddHorseRecipes implements ITweak {
+public class TweakAddHorseRecipes extends ITweak {
 	@Override
 	public String getConfigKey() {
 		return "addHorseRecipes";
 	}
-
-	@Override
-	public boolean getDefaultConfigOption() {
-		return false;
-	}
-
+	
 	@Override
 	public boolean isCompatible() {
 		return true;
-	}
-
-	@Override
-	public boolean onRecipe(List recipeList, IRecipe recipe) {
-		return false;
-	}
-
-	@Override
-	public void onPreRecipe() {
-	}
-
-	@Override
-	public void onInit() {
 	}
 
 	@Override

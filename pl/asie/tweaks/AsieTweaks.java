@@ -11,8 +11,10 @@ import pl.asie.tweaks.proxy.CommonProxy;
 import pl.asie.tweaks.record.RecordRegistry;
 import pl.asie.tweaks.tweaks.TweakAddHorseRecipes;
 import pl.asie.tweaks.tweaks.TweakCompatMetallurgyFoundry;
+import pl.asie.tweaks.tweaks.TweakExpensiveComputers;
 import pl.asie.tweaks.tweaks.TweakOldBookRecipe;
 import pl.asie.tweaks.tweaks.TweakOpenBlocksNerf;
+import pl.asie.tweaks.tweaks.TweakRemoveTurtles;
 import pl.asie.tweaks.tweaks.TweakReplaceMapAtlas;
 import pl.asie.tweaks.tweaks.TweakReworkCraftingTables;
 import pl.asie.tweaks.tweaks.TweakTConAlternateBrickRecipes;
@@ -109,6 +111,12 @@ public class AsieTweaks {
 		addTweak(new TweakTConAlternateBrickRecipes());
 		addTweak(new TweakTConRemoveSmeltery());
 		addTweak(new TweakOpenBlocksNerf());
+		addTweak(new TweakRemoveTurtles());
+		addTweak(new TweakExpensiveComputers());
+		
+		for(ITweak tweak: tweaks) {
+			tweak.onPreInit();
+		}
 	}
 	
 	private ArrayList<ITweak> tweaks = new ArrayList<ITweak>();

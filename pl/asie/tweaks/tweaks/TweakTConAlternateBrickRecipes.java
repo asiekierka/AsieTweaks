@@ -11,7 +11,7 @@ import net.minecraft.item.crafting.IRecipe;
 import pl.asie.tweaks.api.ITweak;
 import pl.asie.tweaks.util.CrossMod;
 
-public class TweakTConAlternateBrickRecipes implements ITweak {
+public class TweakTConAlternateBrickRecipes extends ITweak {
 
 	@Override
 	public String getConfigKey() {
@@ -19,26 +19,12 @@ public class TweakTConAlternateBrickRecipes implements ITweak {
 	}
 
 	@Override
-	public boolean getDefaultConfigOption() {
-		return false;
-	}
-
-	@Override
 	public boolean isCompatible() {
 		return Loader.isModLoaded("TConstruct");
 	}
-
+	
 	@Override
-	public boolean onRecipe(List recipeList, IRecipe recipe) {
-		return false;
-	}
-
-	@Override
-	public void onPreRecipe() {
-	}
-
-	@Override
-	public void onInit() {
+	public void onPostRecipe() {
 		// Obsidian bricks
 		GameRegistry.addShapedRecipe(CrossMod.getItemStack("TConstruct", "multiBrick", 4, 0), "bb", "bb", 'b', new ItemStack(Block.obsidian, 1));
 		// Conversion between the two types
@@ -77,9 +63,4 @@ public class TweakTConAlternateBrickRecipes implements ITweak {
 		// Polished Stone brick - smelting of stone bricks
 		GameRegistry.addSmelting(Block.stoneBrick.blockID, CrossMod.getItemStack("TConstruct", "multiBrick", 1, 3), 0.0F);
 	}
-
-	@Override
-	public void onPostRecipe() {
-	}
-
 }

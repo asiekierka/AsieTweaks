@@ -10,7 +10,7 @@ import pl.asie.tweaks.api.ITweak;
 import pl.asie.tweaks.util.CraftingTweaker;
 import pl.asie.tweaks.util.CrossMod;
 
-public class TweakTConRemoveSmeltery implements ITweak {
+public class TweakTConRemoveSmeltery extends ITweak {
 	
 	private static final String[] smelteryParts = {
 		"smeltery", "lavaTank", "searedBlock", "castingChannel",
@@ -20,11 +20,6 @@ public class TweakTConRemoveSmeltery implements ITweak {
 	@Override
 	public String getConfigKey() {
 		return "tConRemoveSmeltery";
-	}
-
-	@Override
-	public boolean getDefaultConfigOption() {
-		return false;
 	}
 
 	@Override
@@ -39,14 +34,6 @@ public class TweakTConRemoveSmeltery implements ITweak {
 				return true;
 		}
 		return false; // Nothing removed
-	}
-
-	@Override
-	public void onPreRecipe() {
-	}
-
-	@Override
-	public void onInit() {
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 package pl.asie.tweaks.util;
 
+import java.io.File;
 import java.util.HashMap;
 
 import pl.asie.tweaks.AsieTweaks;
@@ -7,6 +8,8 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.Configuration;
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class CrossMod {
@@ -20,6 +23,31 @@ public class CrossMod {
 		classNames.put("ComputerCraft", new String[]{"dan200.computercraft.ComputerCraft$Blocks", "dan200.computercraft.ComputerCraft$Items"});
 		classNames.put("Foundry", new String[]{"exter.foundry.item.FoundryItems"});
 		classNames.put("OpenBlocks", new String[]{"openblocks.OpenBlocks$Blocks", "openblocks.OpenBlocks$Items"});
+	}
+	
+	private static HashMap<String, Configuration> configFiles = new HashMap<String, Configuration>();
+	
+	public static ItemStack getItemStackFromConfig(String modid, String category, String name, int stackSize, int metadata) {
+		Configuration config = configFiles.get(modid);
+		if(config == null) {
+			File configFile = new File(Loader.instance().getConfigDir(), modid + ".cfg");
+			if(configFile.exists()) {
+				config = new Configuration(configFile);
+				config.load();
+				configFiles.put(modid, config);
+			} else return null;
+		}
+		if(config.hasKey(category, name)) {
+			int id = config.get(category, name, -1).getInt();
+			if(id > 0 && id < 65536) {
+				try {
+					return new ItemStack(Item.itemsList[id], stackSize, metadata);
+				} catch(Exception e) {
+					e.printStackTrace();
+					return null;
+				}
+			} else return null;
+		} else return null;
 	}
 	
 	public static ItemStack getItemStack(String modid, String name, int stackSize, int metadata) {

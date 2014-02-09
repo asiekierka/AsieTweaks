@@ -12,16 +12,11 @@ import pl.asie.tweaks.api.ITweak;
 import pl.asie.tweaks.util.CraftingTweaker;
 import pl.asie.tweaks.util.CrossMod;
 
-public class TweakReplaceMapAtlas implements ITweak {
+public class TweakReplaceMapAtlas extends ITweak {
 
 	@Override
 	public String getConfigKey() {
 		return "antiqueAtlasReplaceMap";
-	}
-
-	@Override
-	public boolean getDefaultConfigOption() {
-		return false;
 	}
 
 	@Override
@@ -33,18 +28,6 @@ public class TweakReplaceMapAtlas implements ITweak {
 	public boolean onRecipe(List recipeList, IRecipe recipe) {
 		if(CraftingTweaker.removeOutputRecipe(recipeList, recipe, new ItemStack(Item.emptyMap), true)) return true;
 		return CraftingTweaker.removeOutputRecipe(recipeList, recipe, CrossMod.getItemStack("AntiqueAtlas", "itemEmptyAtlas", 1, 0), true);
-	}
-
-	@Override
-	public void onPreRecipe() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onInit() {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override

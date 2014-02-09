@@ -13,17 +13,12 @@ import pl.asie.tweaks.api.ITweak;
 import pl.asie.tweaks.util.CraftingTweaker;
 import pl.asie.tweaks.util.CrossMod;
 
-public class TweakReworkCraftingTables implements ITweak {
+public class TweakReworkCraftingTables extends ITweak {
 	@Override
 	public String getConfigKey() {
 		return "reworkCraftingTables";
 	}
-
-	@Override
-	public boolean getDefaultConfigOption() {
-		return false;
-	}
-
+	
 	@Override
 	public boolean isCompatible() {
 		return Loader.isModLoaded("TConstruct");
@@ -40,15 +35,7 @@ public class TweakReworkCraftingTables implements ITweak {
 			return false;
 		}
 	}
-
-	@Override
-	public void onPreRecipe() {
-	}
-
-	@Override
-	public void onInit() {
-	}
-
+	
 	@Override
 	public void onPostRecipe() {
 		GameRegistry.addRecipe(new ShapedOreRecipe(CrossMod.getItemStack("TConstruct", "craftingStationWood", 1, 0), "bb", "bb", 'b', "plankWood"));
