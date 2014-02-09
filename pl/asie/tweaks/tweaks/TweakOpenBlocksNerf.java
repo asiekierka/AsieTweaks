@@ -12,13 +12,19 @@ import pl.asie.tweaks.api.TweakBase;
 import pl.asie.tweaks.util.CraftingTweaker;
 import pl.asie.tweaks.util.CrossMod;
 
-public class TweakOpenBlocksNerf extends TweakBase {
-	private HashSet<ItemStack> blocks = new HashSet<ItemStack>();
-	public static final String[] blockStrings = {
-		"block,blockCannonId", "block,blockHealId", "block,blockImaginaryId",
-		"block,blockVillageHighlighterId", "block,blockMachineOreCrusherId", "block,blockProjectorId",
-		"item,itemCraneControl", "item,itemCraneId", "item,itemSlimalyzerId"
-	};
+public class TweakOpenBlocksNerf extends TweakBaseRemoveConfig {
+	public TweakOpenBlocksNerf() {
+		super();
+		this.addBlock("OpenBlocks", "blockCannonId");
+		this.addBlock("OpenBlocks", "blockHealId");
+		this.addBlock("OpenBlocks", "blockImaginaryId");
+		this.addBlock("OpenBlocks", "blockVillageHighlighterId");
+		this.addBlock("OpenBlocks", "blockMachineOreCrusherId");
+		this.addBlock("OpenBlocks", "blockProjectorId");
+		this.addItem("OpenBlocks", "itemCraneControl");
+		this.addItem("OpenBlocks", "itemCraneId");
+		this.addItem("OpenBlocks", "itemSlimalyzerId");
+	}
 	
 	@Override
 	public String getConfigKey() {
@@ -28,21 +34,5 @@ public class TweakOpenBlocksNerf extends TweakBase {
 	@Override
 	public boolean isCompatible() {
 		return Loader.isModLoaded("OpenBlocks");
-	}
-
-	@Override
-	public void onPreRecipe() {
-		for(String s: blockStrings) {
-			ItemStack is = CrossMod.getItemStackFromConfig("OpenBlocks", s.split(",")[0], s.split(",")[1], 1, 0);
-			if(is != null) blocks.add(is);
-		}
-	}
-
-	@Override
-	public boolean onRecipe(List recipeList, IRecipe recipe) {
-		for(ItemStack is: blocks) {
-			if(CraftingTweaker.removeOutputRecipe(recipeList, recipe, is, true)) return true;
-		}
-		return false;
 	}
 }

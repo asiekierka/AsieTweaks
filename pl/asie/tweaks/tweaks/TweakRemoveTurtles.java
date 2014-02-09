@@ -10,7 +10,14 @@ import pl.asie.tweaks.api.TweakBase;
 import pl.asie.tweaks.util.CraftingTweaker;
 import pl.asie.tweaks.util.CrossMod;
 
-public class TweakRemoveTurtles extends TweakBase {
+public class TweakRemoveTurtles extends TweakBaseRemoveConfig {
+	public TweakRemoveTurtles() {
+		super();
+		this.addBlock("CCTurtle", "turtleBlockID");
+		this.addBlock("CCTurtle", "turtleAdvancedBlockID");
+		this.addBlock("CCTurtle", "turtleUpgradedBlockID");
+	}
+	
 	@Override
 	public String getConfigKey() {
 		return "ccRemoveTurtles";
@@ -19,28 +26,5 @@ public class TweakRemoveTurtles extends TweakBase {
 	@Override
 	public boolean isCompatible() {
 		return Loader.isModLoaded("CCTurtle");
-	}
-
-	private HashSet<ItemStack> turtles = new HashSet<ItemStack>();
-	private String[] turtleStrings = {
-			"CCTurtle,block,turtleBlockID",
-			"CCTurtle,block,turtleAdvancedBlockID",
-			"CCTurtle,block,turtleUpgradedBlockID"
-	};
-	
-	@Override
-	public void onPreRecipe() {
-		for(String s: turtleStrings) {
-			ItemStack is = CrossMod.getItemStackFromConfig(s.split(",")[0], s.split(",")[1], s.split(",")[2], 1, 0);
-			if(is != null) turtles.add(is);
-		}
-	}
-
-	@Override
-	public boolean onRecipe(List recipeList, IRecipe recipe) {
-		for(ItemStack is: turtles) {
-			if(CraftingTweaker.removeOutputRecipe(recipeList, recipe, is, true)) return true;
-		}
-		return false;
 	}
 }

@@ -43,7 +43,8 @@ public class TweakCompatMetallurgyMekanism extends TweakBase {
 	public void onPreInit() {
 		dirtyDust = new ItemDirtyDust(AsieTweaks.instance.config.getItem("mekanismDirtyDust", 24899).getInt());
 		clump = new ItemClump(AsieTweaks.instance.config.getItem("mekanismClump", 24898).getInt());
-		shard = new ItemShard(AsieTweaks.instance.config.getItem("mekanismShard", 24899).getInt());
+		shard = new ItemShard(AsieTweaks.instance.config.getItem("mekanismShard", 24897).getInt());
+		crystal = new ItemCrystal(AsieTweaks.instance.config.getItem("mekanismCrystal", 24896).getInt());
 	}
 	
 	public void onInit() {
