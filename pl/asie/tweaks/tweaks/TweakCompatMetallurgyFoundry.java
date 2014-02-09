@@ -7,7 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import cpw.mods.fml.common.Loader;
 import pl.asie.tweaks.AsieTweaks;
-import pl.asie.tweaks.api.ITweak;
+import pl.asie.tweaks.api.TweakBase;
 import pl.asie.tweaks.util.CrossMod;
 import exter.foundry.api.FoundryUtils;
 import exter.foundry.api.recipe.FoundryRecipes;
@@ -19,14 +19,17 @@ import net.minecraftforge.fluids.FluidStack;
 import rebelkeithy.mods.metallurgy.api.IOreInfo;
 import rebelkeithy.mods.metallurgy.api.MetallurgyAPI;
 
-public class TweakCompatMetallurgyFoundry extends ITweak {
-	private Fluid getFluid(String name) {
+public class TweakCompatMetallurgyFoundry extends TweakBase {
+	private static boolean initialized = false;
+	public static boolean isInitialized() { return initialized; }
+	
+	private static Fluid getFluid(String name) {
 		String fluidName = "molten." + name.toLowerCase().replace(' ', '.');
 		// Abuse behaviour: TiC-handled metals END with ".molten", not START, so those will return null
 		return FluidRegistry.getFluid(fluidName);
 	}
 
-	private Fluid getFluidAny(String name) {
+	private static Fluid getFluidAny(String name) {
 		String fluidName = name.toLowerCase().replace(' ', '.');
 		if(name.startsWith("dust")) fluidName = fluidName.substring("dust".length());
 		if(name.startsWith("ingot")) fluidName = fluidName.substring("ingot".length());
@@ -50,6 +53,14 @@ public class TweakCompatMetallurgyFoundry extends ITweak {
 		return Loader.isModLoaded("ExtraTiC") && Loader.isModLoaded("Metallurgy3Core") && Loader.isModLoaded("foundry");
 	}
 	
+	public static void addDust(ItemStack stack, String oreName) {
+		if(!isInitialized()) return;
+		Fluid fluid = getFluidAny(oreName);
+		if(fluid != null) {
+			FoundryRecipes.melting.AddRecipe(stack, new FluidStack(fluid, FoundryRecipes.FLUID_AMOUNT_INGOT));
+		}
+	}
+	
 	public void onPostRecipe() {
 		ItemStack moldIngot = CrossMod.getItemStack("Foundry", "item_mold", 1, 0);
 		ItemStack moldBlock = CrossMod.getItemStack("Foundry", "item_mold", 1, 6);
@@ -58,7 +69,7 @@ public class TweakCompatMetallurgyFoundry extends ITweak {
 			if(group.equals("vanilla")) continue;
 			for(IOreInfo ore : MetallurgyAPI.getMetalSet(group).getOreList().values()) {
 				Fluid fluid = getFluid(ore.getName());
-				if(fluid != null) { // Fluid exists, handled by ExtraTiC
+				if(fluid != null && ore.getIngot() != null) { // Fluid exists, handled by ExtraTiC
 					// Add melting recipes
 				    FoundryRecipes.melting.AddRecipe(ore.getIngot(), new FluidStack(fluid, FoundryRecipes.FLUID_AMOUNT_INGOT));
 			    	FoundryRecipes.melting.AddRecipe(ore.getDust(), new FluidStack(fluid, FoundryRecipes.FLUID_AMOUNT_INGOT));
@@ -90,4 +101,6 @@ public class TweakCompatMetallurgyFoundry extends ITweak {
 	public boolean getDefaultConfigOption() {
 		return true;
 	}
+	
+	public void onPreInit() { initialized = true; }
 }

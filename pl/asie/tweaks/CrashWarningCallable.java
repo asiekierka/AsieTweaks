@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import org.apache.commons.lang3.StringUtils;
 
-import pl.asie.tweaks.api.ITweak;
+import pl.asie.tweaks.api.TweakBase;
 import cpw.mods.fml.common.ICrashCallable;
 
 public class CrashWarningCallable implements ICrashCallable {
@@ -15,7 +15,7 @@ public class CrashWarningCallable implements ICrashCallable {
 		crashInformation += "\n###\n### Debug information\n### ---\n### ";
 		try {
 			ArrayList<String> tweaks = new ArrayList<String>();
-			for(ITweak tweak: AsieTweaks.instance.tweaks) {
+			for(TweakBase tweak: AsieTweaks.instance.tweaks) {
 				if(tweak != null) tweaks.add(tweak.getConfigKey());
 			}
 			crashInformation += "Tweaks applied: " + StringUtils.join(tweaks, ", ");

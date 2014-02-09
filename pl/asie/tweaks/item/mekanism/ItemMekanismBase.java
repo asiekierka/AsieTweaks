@@ -1,4 +1,4 @@
-package pl.asie.tweaks.item;
+package pl.asie.tweaks.item.mekanism;
 
 import java.util.List;
 

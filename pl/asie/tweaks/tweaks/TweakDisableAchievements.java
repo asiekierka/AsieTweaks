@@ -1,9 +1,9 @@
 package pl.asie.tweaks.tweaks;
 
 import pl.asie.tweaks.AsieTweaks;
-import pl.asie.tweaks.api.ITweak;
+import pl.asie.tweaks.api.TweakBase;
 
-public class TweakDisableAchievements extends ITweak {
+public class TweakDisableAchievements extends TweakBase {
 	@Override
 	public String getConfigKey() {
 		return "disableAchievements";

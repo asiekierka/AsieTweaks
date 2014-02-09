@@ -6,9 +6,9 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
-import pl.asie.tweaks.api.ITweak;
+import pl.asie.tweaks.api.TweakBase;
 
-public class TweakOldBookRecipe extends ITweak {
+public class TweakOldBookRecipe extends TweakBase {
 
 	@Override
 	public String getConfigKey() {

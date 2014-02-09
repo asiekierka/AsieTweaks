@@ -1,12 +1,12 @@
 package pl.asie.tweaks.tweaks;
 
-import pl.asie.tweaks.api.ITweak;
+import pl.asie.tweaks.api.TweakBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
-public class TweakPatchTraincraftDamage extends ITweak {
+public class TweakPatchTraincraftDamage extends TweakBase {
 	@Override
 	public String getConfigKey() {
 		// TODO Auto-generated method stub

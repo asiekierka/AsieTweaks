@@ -6,16 +6,19 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Logger;
 
-import pl.asie.tweaks.api.ITweak;
+import pl.asie.tweaks.api.TweakBase;
 import pl.asie.tweaks.proxy.CommonProxy;
 import pl.asie.tweaks.record.RecordRegistry;
 import pl.asie.tweaks.tweaks.TweakAddHorseRecipes;
 import pl.asie.tweaks.tweaks.TweakCompatMetallurgyFoundry;
 import pl.asie.tweaks.tweaks.TweakCompatMetallurgyMekanism;
+import pl.asie.tweaks.tweaks.TweakDisableAchievements;
 import pl.asie.tweaks.tweaks.TweakExpensiveComputers;
+import pl.asie.tweaks.tweaks.TweakMekanismTweaks;
 import pl.asie.tweaks.tweaks.TweakOldBookRecipe;
 import pl.asie.tweaks.tweaks.TweakOpenBlocksNerf;
 import pl.asie.tweaks.tweaks.TweakPatchTraincraftDamage;
+import pl.asie.tweaks.tweaks.TweakRemoveAlloyCrafting;
 import pl.asie.tweaks.tweaks.TweakRemoveTurtles;
 import pl.asie.tweaks.tweaks.TweakReplaceMapAtlas;
 import pl.asie.tweaks.tweaks.TweakReworkCraftingTables;
@@ -103,6 +106,7 @@ public class AsieTweaks {
 		// Vanilla
 		addTweak(new TweakAddHorseRecipes());
 		addTweak(new TweakOldBookRecipe());
+		addTweak(new TweakDisableAchievements());
 		
 		// Compat tweaks
 		addTweak(new TweakCompatMetallurgyFoundry());
@@ -116,18 +120,20 @@ public class AsieTweaks {
 		addTweak(new TweakOpenBlocksNerf());
 		addTweak(new TweakRemoveTurtles());
 		addTweak(new TweakExpensiveComputers());
+		addTweak(new TweakRemoveAlloyCrafting());
+		addTweak(new TweakMekanismTweaks());
 		
 		// Bugfix tweaks
 		addTweak(new TweakPatchTraincraftDamage());
 		
-		for(ITweak tweak: tweaks) {
+		for(TweakBase tweak: tweaks) {
 			tweak.onPreInit();
 		}
 	}
 	
-	ArrayList<ITweak> tweaks = new ArrayList<ITweak>();
+	ArrayList<TweakBase> tweaks = new ArrayList<TweakBase>();
 	
-	public void addTweak(ITweak tweak) {
+	public void addTweak(TweakBase tweak) {
 		if(tweak.isCompatible()) {
 			if(config.get("tweaks", tweak.getConfigKey(), tweak.getDefaultConfigOption()).getBoolean(tweak.getDefaultConfigOption())) {
 				log.info("Added tweak " + tweak.getClass().getName());
@@ -140,7 +146,7 @@ public class AsieTweaks {
 		List recipesOriginal = CraftingManager.getInstance().getRecipeList();
 		List recipes = new ArrayList(recipesOriginal);
 		
-		for(ITweak tweak: tweaks) {
+		for(TweakBase tweak: tweaks) {
 			tweak.onPreRecipe();
 		}
 		
@@ -149,12 +155,12 @@ public class AsieTweaks {
 			Object o = itr.next();
 			if (!(o instanceof IRecipe)) continue;
 			IRecipe recipe = (IRecipe)o;
-			for(ITweak tweak: tweaks) {
+			for(TweakBase tweak: tweaks) {
 				if(tweak.onRecipe(recipesOriginal, recipe)) break; // Recipe has been removed.
 			}
 		}
 		
-		for(ITweak tweak: tweaks) {
+		for(TweakBase tweak: tweaks) {
 			tweak.onPostRecipe();
 		}
 	}
@@ -170,7 +176,7 @@ public class AsieTweaks {
 		LanguageRegistry lr = LanguageRegistry.instance();
 		lr.addStringLocalization("commands.skinreload.usage", "/skinreload [player]");
 
-		for(ITweak tweak: tweaks) {
+		for(TweakBase tweak: tweaks) {
 			tweak.onInit();
 		}
 	}

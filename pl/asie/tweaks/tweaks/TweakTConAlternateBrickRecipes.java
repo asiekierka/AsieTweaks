@@ -8,10 +8,10 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
-import pl.asie.tweaks.api.ITweak;
+import pl.asie.tweaks.api.TweakBase;
 import pl.asie.tweaks.util.CrossMod;
 
-public class TweakTConAlternateBrickRecipes extends ITweak {
+public class TweakTConAlternateBrickRecipes extends TweakBase {
 
 	@Override
 	public String getConfigKey() {

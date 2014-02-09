@@ -12,11 +12,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
-import pl.asie.tweaks.api.ITweak;
+import pl.asie.tweaks.api.TweakBase;
 import pl.asie.tweaks.util.CraftingTweaker;
 import pl.asie.tweaks.util.CrossMod;
 
-public class TweakExpensiveComputers extends ITweak {
+public class TweakExpensiveComputers extends TweakBase {
 	@Override
 	public String getConfigKey() {
 		return "ccExpensiveComputers";

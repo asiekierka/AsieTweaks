@@ -8,11 +8,11 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
-import pl.asie.tweaks.api.ITweak;
+import pl.asie.tweaks.api.TweakBase;
 import pl.asie.tweaks.util.CraftingTweaker;
 import pl.asie.tweaks.util.CrossMod;
 
-public class TweakOpenBlocksNerf extends ITweak {
+public class TweakOpenBlocksNerf extends TweakBase {
 	private HashSet<ItemStack> blocks = new HashSet<ItemStack>();
 	public static final String[] blockStrings = {
 		"block,blockCannonId", "block,blockHealId", "block,blockImaginaryId",

@@ -8,11 +8,11 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
-import pl.asie.tweaks.api.ITweak;
+import pl.asie.tweaks.api.TweakBase;
 import pl.asie.tweaks.util.CraftingTweaker;
 import pl.asie.tweaks.util.CrossMod;
 
-public class TweakReplaceMapAtlas extends ITweak {
+public class TweakReplaceMapAtlas extends TweakBase {
 
 	@Override
 	public String getConfigKey() {

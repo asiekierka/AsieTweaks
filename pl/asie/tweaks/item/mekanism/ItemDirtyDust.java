@@ -1,4 +1,4 @@
-package pl.asie.tweaks.item;
+package pl.asie.tweaks.item.mekanism;
 
 import java.util.List;
 
@@ -13,9 +13,10 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
+import net.minecraftforge.oredict.OreDictionary;
 
 public class ItemDirtyDust extends ItemMekanismBase {
-	private String[] textureNames;
+	private String[] textureNames = new String[128];
 	
 	public ItemDirtyDust(int id) {
 		super(id, "dirtyDust");
@@ -27,10 +28,12 @@ public class ItemDirtyDust extends ItemMekanismBase {
 		return 0x7F7F7F;
 	}
 	
-	public void addOre(String category, IOreInfo ore) {
+	public int addOre(String category, IOreInfo ore) {
 		textureNames[arrayPosition] = "Metallurgy:" + StringUtils.capitalize(category) + "/" + ore.getName() + "Dust";
+		OreDictionary.registerOre("dustDirty" + ore.getName().replaceAll(" ", ""), new ItemStack(this, 1, arrayPosition));
 		LanguageRegistry.instance().addStringLocalization("item.asietweaks."+prefix+arrayPosition+".name", "Dirty " + ore.getName() + " Dust");
 		arrayPosition++;
+		return arrayPosition-1;
 	}
 	
 	@Override

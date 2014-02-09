@@ -9,11 +9,11 @@ import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraftforge.oredict.ShapedOreRecipe;
-import pl.asie.tweaks.api.ITweak;
+import pl.asie.tweaks.api.TweakBase;
 import pl.asie.tweaks.util.CraftingTweaker;
 import pl.asie.tweaks.util.CrossMod;
 
-public class TweakReworkCraftingTables extends ITweak {
+public class TweakReworkCraftingTables extends TweakBase {
 	@Override
 	public String getConfigKey() {
 		return "reworkCraftingTables";

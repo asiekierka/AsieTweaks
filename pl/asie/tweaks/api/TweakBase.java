@@ -4,7 +4,7 @@ import java.util.List;
 
 import net.minecraft.item.crafting.IRecipe;
 
-public abstract class ITweak {
+public abstract class TweakBase {
 	public abstract String getConfigKey();
 	public boolean getDefaultConfigOption() {
 		return false;
