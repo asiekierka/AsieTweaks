@@ -30,8 +30,12 @@ public class CrossMod {
 	public static ItemStack getItemStackFromConfig(String modid, String category, String name, int stackSize, int metadata) {
 		Configuration config = configFiles.get(modid);
 		if(config == null) {
-			File configFile = new File(Loader.instance().getConfigDir(), modid + ".cfg");
-			if(configFile.exists()) {
+			File configFile = null;
+			if(modid.equalsIgnoreCase("buildcraft"))
+				configFile = new File(Loader.instance().getConfigDir(), "buildcraft/main.conf");
+			else
+				configFile = new File(Loader.instance().getConfigDir(), modid + ".cfg");
+			if(configFile != null && configFile.exists()) {
 				config = new Configuration(configFile);
 				config.load();
 				configFiles.put(modid, config);

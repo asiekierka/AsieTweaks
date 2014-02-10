@@ -10,12 +10,12 @@ import pl.asie.tweaks.api.TweakBase;
 import pl.asie.tweaks.util.CraftingTweaker;
 import pl.asie.tweaks.util.CrossMod;
 
-public class TweakRemoveTurtles extends TweakBaseRemoveConfig {
+public class TweakRemoveTurtles extends TweakBaseConfig {
 	public TweakRemoveTurtles() {
 		super();
-		this.addBlock("CCTurtle", "turtleBlockID");
-		this.addBlock("CCTurtle", "turtleAdvancedBlockID");
-		this.addBlock("CCTurtle", "turtleUpgradedBlockID");
+		this.removeBlock("CCTurtle", "turtleBlockID");
+		this.removeBlock("CCTurtle", "turtleAdvancedBlockID");
+		this.removeBlock("CCTurtle", "turtleUpgradedBlockID");
 	}
 	
 	@Override

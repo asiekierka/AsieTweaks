@@ -12,18 +12,18 @@ import pl.asie.tweaks.api.TweakBase;
 import pl.asie.tweaks.util.CraftingTweaker;
 import pl.asie.tweaks.util.CrossMod;
 
-public class TweakOpenBlocksNerf extends TweakBaseRemoveConfig {
+public class TweakOpenBlocksNerf extends TweakBaseConfig {
 	public TweakOpenBlocksNerf() {
 		super();
-		this.addBlock("OpenBlocks", "blockCannonId");
-		this.addBlock("OpenBlocks", "blockHealId");
-		this.addBlock("OpenBlocks", "blockImaginaryId");
-		this.addBlock("OpenBlocks", "blockVillageHighlighterId");
-		this.addBlock("OpenBlocks", "blockMachineOreCrusherId");
-		this.addBlock("OpenBlocks", "blockProjectorId");
-		this.addItem("OpenBlocks", "itemCraneControl");
-		this.addItem("OpenBlocks", "itemCraneId");
-		this.addItem("OpenBlocks", "itemSlimalyzerId");
+		this.removeBlock("OpenBlocks", "blockCannonId");
+		this.removeBlock("OpenBlocks", "blockHealId");
+		this.removeBlock("OpenBlocks", "blockImaginaryId");
+		this.removeBlock("OpenBlocks", "blockVillageHighlighterId");
+		this.removeBlock("OpenBlocks", "blockMachineOreCrusherId");
+		this.removeBlock("OpenBlocks", "blockProjectorId");
+		this.removeItem("OpenBlocks", "itemCraneControl");
+		this.removeItem("OpenBlocks", "itemCraneId");
+		this.removeItem("OpenBlocks", "itemSlimalyzerId");
 	}
 	
 	@Override

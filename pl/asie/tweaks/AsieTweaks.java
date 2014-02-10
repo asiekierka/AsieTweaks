@@ -10,11 +10,13 @@ import pl.asie.tweaks.api.TweakBase;
 import pl.asie.tweaks.proxy.CommonProxy;
 import pl.asie.tweaks.record.RecordRegistry;
 import pl.asie.tweaks.tweaks.TweakAddHorseRecipes;
+import pl.asie.tweaks.tweaks.TweakAsiepackRecipes;
 import pl.asie.tweaks.tweaks.TweakCompatMetallurgyFoundry;
 import pl.asie.tweaks.tweaks.TweakCompatMetallurgyMekanism;
 import pl.asie.tweaks.tweaks.TweakDisableAchievements;
 import pl.asie.tweaks.tweaks.TweakExpensiveComputers;
 import pl.asie.tweaks.tweaks.TweakMekanismTweaks;
+import pl.asie.tweaks.tweaks.TweakNewGears;
 import pl.asie.tweaks.tweaks.TweakOldBookRecipe;
 import pl.asie.tweaks.tweaks.TweakOpenBlocksNerf;
 import pl.asie.tweaks.tweaks.TweakPatchTraincraftDamage;
@@ -123,8 +125,13 @@ public class AsieTweaks {
 		addTweak(new TweakRemoveAlloyCrafting());
 		addTweak(new TweakMekanismTweaks());
 		
+		// New content
+		addTweak(new TweakNewGears());
+		
 		// Bugfix tweaks
 		addTweak(new TweakPatchTraincraftDamage());
+		
+		addTweak(new TweakAsiepackRecipes());
 		
 		for(TweakBase tweak: tweaks) {
 			tweak.onPreInit();
