@@ -19,7 +19,7 @@ public abstract class TweakBaseConfig extends TweakBase {
 	@Override
 	public boolean onRecipe(List recipeList, IRecipe recipe) {
 		for(String s: types) {
-			ItemStack is = CrossMod.getItemStackFromConfig(s.split(",")[0], s.split(",")[1], s.split(",")[2], 1, 0);
+			ItemStack is = CrossMod.getItemStackFromConfig(s.split(",")[0], s.split(",")[1], s.split(",")[2], 1, 0, s.split(",")[1].equals("item"));
 			String meta = s.split(",")[3];
 			if(meta.equals("all")) {
 				if(CraftingTweaker.removeOutputRecipe(recipeList, recipe, is, true)) return true;
@@ -59,19 +59,19 @@ public abstract class TweakBaseConfig extends TweakBase {
 		removeType(mod, "item", name, meta);
 	}
 	
-	public ItemStack getItemStack(String mod, String name, int stackSize, int metadata) {
-		return CrossMod.getItemStackFromConfig(mod, "block", name, stackSize, metadata);
+	private ItemStack getItemStack(String mod, String category, String name, int stackSize, int metadata) {
+		return CrossMod.getItemStackFromConfig(mod, category, name, stackSize, metadata, category.equals("item"));
 	}
 	
 	public Block getBlock(String mod, String name) {
-		ItemStack is = getItemStack(mod, name, 1, 0);
+		ItemStack is = getItemStack(mod, "block", name, 1, 0);
 		if(is != null && is.getItem() instanceof ItemBlock) {
 			return Block.blocksList[((ItemBlock)is.getItem()).itemID];
 		} else return null;
 	}
 	
 	public Item getItem(String mod, String name) {
-		ItemStack is = getItemStack(mod, name, 1, 0);
+		ItemStack is = getItemStack(mod, "item", name, 1, 0);
 		if(is != null) return is.getItem();
 		else return null;
 	}

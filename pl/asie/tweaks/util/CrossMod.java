@@ -27,7 +27,7 @@ public class CrossMod {
 	
 	private static HashMap<String, Configuration> configFiles = new HashMap<String, Configuration>();
 	
-	public static ItemStack getItemStackFromConfig(String modid, String category, String name, int stackSize, int metadata) {
+	public static ItemStack getItemStackFromConfig(String modid, String category, String name, int stackSize, int metadata, boolean isItem) {
 		Configuration config = configFiles.get(modid);
 		if(config == null) {
 			File configFile = null;
@@ -43,7 +43,8 @@ public class CrossMod {
 		}
 		if(config.hasKey(category, name)) {
 			int id = config.get(category, name, -1).getInt();
-			if(id > 0 && id < 65536) {
+			if(isItem) id += 256;
+			if(id > 0 && id < 32768 && Item.itemsList[id] != null) {
 				try {
 					return new ItemStack(Item.itemsList[id], stackSize, metadata);
 				} catch(Exception e) {
@@ -105,5 +106,9 @@ public class CrossMod {
 		if(item instanceof ItemBlock) {
 			Block.blocksList[((ItemBlock)item).getBlockID()].setUnlocalizedName(name);
 		}
+	}
+	
+	public static void renameItem(Item target, String name) {
+		renameItemStack(new ItemStack(target, 1, 0), name);
 	}
 }

@@ -39,7 +39,7 @@ public class TweakExpensiveComputers extends TweakBase {
 	@Override
 	public void onPreRecipe() {
 		for(String s: blockStrings) {
-			ItemStack is = CrossMod.getItemStackFromConfig(s.split(",")[0], s.split(",")[1], s.split(",")[2], 1, new Integer(s.split(",")[3]).intValue());
+			ItemStack is = CrossMod.getItemStackFromConfig(s.split(",")[0], s.split(",")[1], s.split(",")[2], 1, new Integer(s.split(",")[3]).intValue(), false);
 			if(is != null && !blocks.containsKey(s.split(",")[2])) blocks.put(s.split(",")[2], is);
 		}
 	}
