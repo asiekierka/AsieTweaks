@@ -63,17 +63,25 @@ public abstract class TweakBaseConfig extends TweakBase {
 		return CrossMod.getItemStackFromConfig(mod, category, name, stackSize, metadata, category.equals("item"));
 	}
 	
-	public Block getBlock(String mod, String name) {
-		ItemStack is = getItemStack(mod, "block", name, 1, 0);
+	public Block getBlock(String mod, String c, String name) {
+		ItemStack is = getItemStack(mod, c, name, 1, 0);
 		if(is != null && is.getItem() instanceof ItemBlock) {
 			return Block.blocksList[((ItemBlock)is.getItem()).itemID];
 		} else return null;
 	}
 	
-	public Item getItem(String mod, String name) {
-		ItemStack is = getItemStack(mod, "item", name, 1, 0);
+	public Item getItem(String mod, String c, String name) {
+		ItemStack is = getItemStack(mod, c, name, 1, 0);
 		if(is != null) return is.getItem();
 		else return null;
+	}
+	
+	public Block getBlock(String mod, String name) {
+		return getBlock(mod, "block", name);
+	}
+	
+	public Item getItem(String mod, String name) {
+		return getItem(mod, "item", name);
 	}
 	
 	@Override

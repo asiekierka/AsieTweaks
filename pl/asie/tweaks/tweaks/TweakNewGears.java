@@ -47,11 +47,12 @@ public class TweakNewGears extends TweakBaseConfig {
 		
 		// Progression 2: Cabling
 		gear.addGear(0xE26313, "Copper Gear", "gearCopper", "gearWood", "ingotCopper");
-		gear.addGear(0xD99A3B, "Brass Gear", "gearBrass", "gearCopper", "ingotBrass");
-		gear.addGear(0xFFFF8B, "Golden Gear", "gearGold", "gearBrass", "ingotGold");
+		gear.addGear(0xDCE0A1, "Zinc Gear", "gearZinc", "gearCopper", "ingotZinc");
+		gear.addGear(0xFFFF8B, "Golden Gear", "gearGold", "gearZinc", "ingotGold");
 		gear.addGear(0xDECFAA, "Electrum Gear", "gearElectrum", "gearGold", "ingotElectrum");
 		
 		// Alloy-plated gears
+		gear.addGear(0xD99A3B, "Brass Gear", "gearBrass", "gearCopper", "ingotBrass");
 		gear.addGear(0xD28844, "Bronze Gear", "gearBronze", "gearCopper", "ingotBronze");
 		gear.addGear(0xDCDFA3, "Zinc Gear", "gearZinc", "gearWood", "ingotZinc");
 		gear.addGear(0xE5E5E5, "Silver Gear", "gearSilver", "gearIron", "ingotSilver");

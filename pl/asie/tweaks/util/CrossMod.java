@@ -33,6 +33,8 @@ public class CrossMod {
 			File configFile = null;
 			if(modid.equalsIgnoreCase("buildcraft"))
 				configFile = new File(Loader.instance().getConfigDir(), "buildcraft/main.conf");
+			else if(modid.equalsIgnoreCase("EnderIO"))
+				configFile = new File(Loader.instance().getConfigDir(), "enderio/EnderIO.conf");
 			else
 				configFile = new File(Loader.instance().getConfigDir(), modid + ".cfg");
 			if(configFile != null && configFile.exists()) {
@@ -43,7 +45,7 @@ public class CrossMod {
 		}
 		if(config.hasKey(category, name)) {
 			int id = config.get(category, name, -1).getInt();
-			if(isItem) id += 256;
+			if(isItem && !modid.equals("immibis") && !modid.equals("foundry")) id += 256;
 			if(id > 0 && id < 32768 && Item.itemsList[id] != null) {
 				try {
 					return new ItemStack(Item.itemsList[id], stackSize, metadata);

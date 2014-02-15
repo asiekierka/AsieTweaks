@@ -16,6 +16,7 @@ import pl.asie.tweaks.tweaks.TweakCompatMetallurgyMekanism;
 import pl.asie.tweaks.tweaks.TweakDisableAchievements;
 import pl.asie.tweaks.tweaks.TweakExpensiveComputers;
 import pl.asie.tweaks.tweaks.TweakMekanismTweaks;
+import pl.asie.tweaks.tweaks.TweakMoreRailRecipes;
 import pl.asie.tweaks.tweaks.TweakNewGears;
 import pl.asie.tweaks.tweaks.TweakOldBookRecipe;
 import pl.asie.tweaks.tweaks.TweakOpenBlocksNerf;
@@ -24,6 +25,7 @@ import pl.asie.tweaks.tweaks.TweakRemoveAlloyCrafting;
 import pl.asie.tweaks.tweaks.TweakRemoveTurtles;
 import pl.asie.tweaks.tweaks.TweakReplaceMapAtlas;
 import pl.asie.tweaks.tweaks.TweakReworkCraftingTables;
+import pl.asie.tweaks.tweaks.TweakSimpleFoundryRecipes;
 import pl.asie.tweaks.tweaks.TweakTConAlternateBrickRecipes;
 import pl.asie.tweaks.tweaks.TweakTConRemoveSmeltery;
 import pl.asie.tweaks.util.CraftingTweaker;
@@ -105,6 +107,8 @@ public class AsieTweaks {
 			log.info("Hey, you! Yes, you! Thanks for using AsieLauncher! ~asie");
 		}
 
+		addTweak(new TweakAsiepackRecipes());
+		
 		// Vanilla
 		addTweak(new TweakAddHorseRecipes());
 		addTweak(new TweakOldBookRecipe());
@@ -124,14 +128,14 @@ public class AsieTweaks {
 		addTweak(new TweakExpensiveComputers());
 		addTweak(new TweakRemoveAlloyCrafting());
 		addTweak(new TweakMekanismTweaks());
+		addTweak(new TweakSimpleFoundryRecipes());
 		
 		// New content
 		addTweak(new TweakNewGears());
+		addTweak(new TweakMoreRailRecipes());
 		
 		// Bugfix tweaks
 		addTweak(new TweakPatchTraincraftDamage());
-		
-		addTweak(new TweakAsiepackRecipes());
 		
 		for(TweakBase tweak: tweaks) {
 			tweak.onPreInit();
