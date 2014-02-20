@@ -1,4 +1,4 @@
-package pl.asie.tweaks.tweaks;
+package pl.asie.tweaks.tweaks.asiepack;
 
 import java.util.List;
 
@@ -13,10 +13,10 @@ import pl.asie.tweaks.api.TweakBase;
 import pl.asie.tweaks.util.CraftingTweaker;
 import pl.asie.tweaks.util.CrossMod;
 
-public class TweakReworkCraftingTables extends TweakBase {
+public class TweakAsiepackReworkCraftingTables extends TweakBase {
 	@Override
 	public String getConfigKey() {
-		return "reworkCraftingTables";
+		return "asiepackRecipes";
 	}
 	
 	@Override

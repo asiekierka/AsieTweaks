@@ -2,19 +2,19 @@ package pl.asie.tweaks;
 
 import java.util.Map;
 
-import pl.asie.tweaks.skin.SkinClassTransformer;
+import pl.asie.tweaks.core.BCPipeRFSupport;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
 
 public class AsieTweaksLoadingPlugin implements IFMLLoadingPlugin {
 
 	@Override
 	public String[] getASMTransformerClass() {
-		return new String[]{SkinClassTransformer.class.getName()};
+		return new String[]{BCPipeRFSupport.class.getName()};
 	}
-	
+
 	@Override
 	public String[] getLibraryRequestClass() { return null; }
-	
+
 	@Override
 	public String getModContainerClass() {
 		return null;

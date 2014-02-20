@@ -1,4 +1,4 @@
-package pl.asie.tweaks.tweaks;
+package pl.asie.tweaks.tweaks.asiepack;
 
 import java.util.List;
 
@@ -7,11 +7,11 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraftforge.oredict.OreDictionary;
 import pl.asie.tweaks.api.TweakBase;
 
-public class TweakRemoveAlloyCrafting extends TweakBase {
+public class TweakAsiepackRemoveAlloyCrafting extends TweakBase {
 
 	@Override
 	public String getConfigKey() {
-		return "removeAlloyCrafting";
+		return "asiepackRecipes";
 	}
 
 	@Override

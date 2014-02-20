@@ -1,4 +1,4 @@
-package pl.asie.tweaks.tweaks;
+package pl.asie.tweaks.tweaks.asiepack;
 
 import java.util.List;
 
@@ -11,6 +11,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import pl.asie.tweaks.AsieTweaks;
+import pl.asie.tweaks.tweaks.TweakBaseConfig;
+import pl.asie.tweaks.tweaks.TweakNewGears;
+import pl.asie.tweaks.util.CraftingTweaker;
 import pl.asie.tweaks.util.CrossMod;
 
 public class TweakAsiepackRecipes extends TweakBaseConfig {
@@ -36,9 +39,15 @@ public class TweakAsiepackRecipes extends TweakBaseConfig {
 		removeItem("immibis", "itemSaw");
 		removeBlock("betterstorage", "craftingStation");
 		removeBlock("immibis", "chunkloader.id");
+		removeItem("StevesCarts", "ModuleComponents", 9); // Simple PCB
+		removeItem("StevesCarts", "ModuleComponents", 10); // Graphical Display
 		
-		removeItem("BuildCraft", "pipeFluidsVoid.id");
-		removeItem("BuildCraft", "pipeItemsVoid.id");
+		removeBlock("ExtraUtilities", "enderQuarryId");
+		removeItem("BuildCraft", "diamondGearItem.id");
+		removeItem("BuildCraft", "ironGearItem.id");
+		removeItem("BuildCraft", "stoneGearItem.id");
+		removeItem("BuildCraft", "woodenGearItem.id");
+		removeItem("BuildCraft", "goldenGearItem.id");
 	}
 	
 	@Override
@@ -59,7 +68,16 @@ public class TweakAsiepackRecipes extends TweakBaseConfig {
 		l.addStringLocalization("item.asietweaks.electrumItemPipe", "Electrum Transport Pipe");
 		l.addStringLocalization("item.asietweaks.silverFluidPipe", "Silver Fluid Pipe");
 		l.addStringLocalization("item.asietweaks.silverItemPipe", "Silver Transport Pipe");
-		l.addStringLocalization("item.asietweaks.saw", "Saw");
+		l.addStringLocalization("item.asietweaks.saw.name", "Saw");
+	}
+	
+	@Override
+	public boolean onRecipe(List recipeList, IRecipe recipe) {
+		if(!super.onRecipe(recipeList, recipe)) {
+			recipe = CraftingTweaker.replaceInRecipe(recipeList, recipe, "gearStone", TweakNewGears.gear.getGearStack("gearTin"), true);
+			recipe = CraftingTweaker.replaceInRecipe(recipeList, recipe, "gearDiamond", TweakNewGears.gear.getGearStack("gearPlatinum"), true);
+			return false;
+		} else return true;
 	}
 	
 	@Override
@@ -175,6 +193,13 @@ public class TweakAsiepackRecipes extends TweakBaseConfig {
 			if(chunkloader != null) {
 				GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(chunkloader, 1, 0), " g ", "gag", " g ", 'g', "gearElectrum", 'a', "ingotAtlarus"));
 				GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(chunkloader, 1, 0), " g ", "gag", " g ", 'g', "gearElectrum", 'a', "ingotAdamantine"));
+			}
+			
+			Item moduleComponents = getItem("StevesCarts", "ModuleComponents");
+			if(moduleComponents != null) {
+				GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(moduleComponents, 1, 9), "zrz", "rbr", "zrz", 'z', "ingotZinc", 'b', "ingotBrass", 'r', Item.redstone));
+				GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(moduleComponents, 1, 10), "geg", "psp", "rpr", 'g', "ingotGold", 'e', "ingotElectrum", 'r', Item.redstone, 's', new ItemStack(moduleComponents, 1, 9), 'p', Block.thinGlass));
+				
 			}
 		}
 	}

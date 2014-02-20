@@ -10,24 +10,25 @@ import pl.asie.tweaks.api.TweakBase;
 import pl.asie.tweaks.proxy.CommonProxy;
 import pl.asie.tweaks.record.RecordRegistry;
 import pl.asie.tweaks.tweaks.TweakAddHorseRecipes;
-import pl.asie.tweaks.tweaks.TweakAsiepackRecipes;
+import pl.asie.tweaks.tweaks.TweakAddLiquidDyes;
 import pl.asie.tweaks.tweaks.TweakCompatMetallurgyFoundry;
 import pl.asie.tweaks.tweaks.TweakCompatMetallurgyMekanism;
 import pl.asie.tweaks.tweaks.TweakDisableAchievements;
 import pl.asie.tweaks.tweaks.TweakExpensiveComputers;
-import pl.asie.tweaks.tweaks.TweakMekanismTweaks;
 import pl.asie.tweaks.tweaks.TweakMoreRailRecipes;
 import pl.asie.tweaks.tweaks.TweakNewGears;
 import pl.asie.tweaks.tweaks.TweakOldBookRecipe;
-import pl.asie.tweaks.tweaks.TweakOpenBlocksNerf;
 import pl.asie.tweaks.tweaks.TweakPatchTraincraftDamage;
-import pl.asie.tweaks.tweaks.TweakRemoveAlloyCrafting;
 import pl.asie.tweaks.tweaks.TweakRemoveTurtles;
 import pl.asie.tweaks.tweaks.TweakReplaceMapAtlas;
-import pl.asie.tweaks.tweaks.TweakReworkCraftingTables;
 import pl.asie.tweaks.tweaks.TweakSimpleFoundryRecipes;
 import pl.asie.tweaks.tweaks.TweakTConAlternateBrickRecipes;
-import pl.asie.tweaks.tweaks.TweakTConRemoveSmeltery;
+import pl.asie.tweaks.tweaks.asiepack.TweakAsiepackRecipes;
+import pl.asie.tweaks.tweaks.asiepack.TweakAsiepackMekanism;
+import pl.asie.tweaks.tweaks.asiepack.TweakAsiepackOpenBlocks;
+import pl.asie.tweaks.tweaks.asiepack.TweakAsiepackRemoveAlloyCrafting;
+import pl.asie.tweaks.tweaks.asiepack.TweakAsiepackReworkCraftingTables;
+import pl.asie.tweaks.tweaks.asiepack.TweakAsiepackRemoveSmeltery;
 import pl.asie.tweaks.util.CraftingTweaker;
 import pl.asie.tweaks.util.CrossMod;
 import cpw.mods.fml.client.registry.RenderingRegistry;
@@ -62,7 +63,7 @@ import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
-@Mod(modid="asietweaks", name="AsieTweaks", version="0.1.0", dependencies="after:Metallurgy3Core")
+@Mod(modid="asietweaks", name="AsieTweaks", version="0.1.0", dependencies="after:Metallurgy3Core;after:LogisticsPipes|Main;after:BuildCraft|Core;after:BuildCraft|Silicon")
 @NetworkMod(channels={"AsieTweaks"}, clientSideRequired=true, packetHandler=NetworkHandler.class)
 public class AsieTweaks {
 	public Configuration config;
@@ -97,22 +98,23 @@ public class AsieTweaks {
 		proxy.registerSounds();
 		
 		forceTweakOverrides = config.get("tweaks", "forceOverrides", false).getBoolean(false);
-		
-		config.addCustomCategoryComment("skin", "Functions related to the skin changing functionality. NOTE: The URL parameters are intended for roleplay and/or NPC servers.");
-    	skinURL = config.get("skin", "skinURL", "http://skins.minecraft.net/MinecraftSkins/%s.png").getString();
-    	capeURL = config.get("skin", "capeURL", "http://skins.minecraft.net/MinecraftCloaks/%s.png").getString();
-    	proxy.setSkin(skinURL, capeURL);
     	
 		if(System.getProperty("user.dir").indexOf(".asielauncher") >= 0) {
 			log.info("Hey, you! Yes, you! Thanks for using AsieLauncher! ~asie");
 		}
 
 		addTweak(new TweakAsiepackRecipes());
+		addTweak(new TweakAsiepackRemoveAlloyCrafting());
+		addTweak(new TweakAsiepackMekanism());
+		addTweak(new TweakAsiepackReworkCraftingTables());
+		addTweak(new TweakAsiepackRemoveSmeltery());
+		addTweak(new TweakAsiepackOpenBlocks());
 		
 		// Vanilla
 		addTweak(new TweakAddHorseRecipes());
 		addTweak(new TweakOldBookRecipe());
 		addTweak(new TweakDisableAchievements());
+		addTweak(new TweakAddLiquidDyes());
 		
 		// Compat tweaks
 		addTweak(new TweakCompatMetallurgyFoundry());
@@ -120,14 +122,9 @@ public class AsieTweaks {
 		
 		// Rework tweaks
 		addTweak(new TweakReplaceMapAtlas());
-		addTweak(new TweakReworkCraftingTables());
 		addTweak(new TweakTConAlternateBrickRecipes());
-		addTweak(new TweakTConRemoveSmeltery());
-		addTweak(new TweakOpenBlocksNerf());
 		addTweak(new TweakRemoveTurtles());
 		addTweak(new TweakExpensiveComputers());
-		addTweak(new TweakRemoveAlloyCrafting());
-		addTweak(new TweakMekanismTweaks());
 		addTweak(new TweakSimpleFoundryRecipes());
 		
 		// New content

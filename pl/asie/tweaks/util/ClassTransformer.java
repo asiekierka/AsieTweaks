@@ -56,6 +56,16 @@ public class ClassTransformer implements IClassTransformer {
 		return classNode;
 	}
 	
+	public static ClassNode getClassNode(String name) {
+		try {
+			ClassNode classNode = new ClassNode();
+			ClassReader classReader = new ClassReader(name);
+			classReader.accept(classNode, 0);
+			return classNode;
+		} catch(Exception e) { e.printStackTrace(); return null; }
+	}
+	
+	
 	public static byte[] writeBytecode(ClassNode node) {
 		ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_MAXS);
 		node.accept(writer);

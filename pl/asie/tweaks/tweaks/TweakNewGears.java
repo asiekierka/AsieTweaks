@@ -3,7 +3,7 @@ package pl.asie.tweaks.tweaks;
 import cpw.mods.fml.common.Loader;
 import pl.asie.tweaks.AsieTweaks;
 import pl.asie.tweaks.api.TweakBase;
-import pl.asie.tweaks.item.mekanism.ItemGear;
+import pl.asie.tweaks.item.ItemGear;
 
 public class TweakNewGears extends TweakBaseConfig {
 	public static ItemGear gear;

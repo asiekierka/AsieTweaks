@@ -31,61 +31,76 @@ public class CraftingTweaker {
 		else return false;
 	}
 	
-	public static IRecipe replaceInRecipe(List list, IRecipe recipe, Object from, Object to, boolean ignoreMeta) {
+	public static IRecipe replaceInRecipe(List list, IRecipe recipe, Object _from, Object _to, boolean ignoreMeta) {
 		boolean changed = false;
 		IRecipe newRecipe = null;
 		
-		if(from instanceof ItemStack && to instanceof ItemStack) {
-			if(recipe instanceof ShapedRecipes) {
-				ShapedRecipes shaped = (ShapedRecipes)recipe;
-				
-				ItemStack[] input = new ItemStack[shaped.recipeItems.length];
-				// Correct input
+		ItemStack to = null;
+		if(_to instanceof String) to = OreDictionary.getOres((String)_to).get(0);
+		else if(_to instanceof ItemStack) to = (ItemStack)_to;
+		
+		ArrayList<ItemStack> fromList = new ArrayList<ItemStack>();
+		if(_from instanceof String) {
+			fromList = OreDictionary.getOres((String)_from);
+		} else if(_from instanceof ItemStack) {
+			fromList.add((ItemStack)_from);
+		}
+		
+		if(recipe instanceof ShapedRecipes && to != null) {
+			ShapedRecipes shaped = (ShapedRecipes)recipe;
+			
+			ItemStack[] input = new ItemStack[shaped.recipeItems.length];
+			ItemStack output = shaped.getRecipeOutput();
+			for(ItemStack from: fromList) {
 				for(int i = 0; i < shaped.recipeItems.length; i++) {
-					if(equal(shaped.recipeItems[i], (ItemStack)from, ignoreMeta)) {
-						input[i] = (ItemStack)to;
+					if(equal(shaped.recipeItems[i], from, ignoreMeta)) {
+						input[i] = to;
 						changed = true;
 					} else input[i] = shaped.recipeItems[i];
 				}
 				
-				// Correct output
-				ItemStack output = shaped.getRecipeOutput();
-				if(equal(output, (ItemStack)from, ignoreMeta)) { output = (ItemStack)to; changed = true; }
-				
-				if(changed) newRecipe = new ShapedRecipes(shaped.recipeWidth, shaped.recipeHeight, input, output);
-			} else if(recipe instanceof ShapelessRecipes) {
-				ShapelessRecipes shapeless = (ShapelessRecipes)recipe;
-				ArrayList input = new ArrayList();
-				
-				// Correct input
+				if(equal(output, from, ignoreMeta)) { output = to; changed = true; }
+			}
+			
+			if(changed) {
+				newRecipe = new ShapedRecipes(shaped.recipeWidth, shaped.recipeHeight, input, output);
+			}
+		} else if(recipe instanceof ShapelessRecipes && to != null) {
+			ShapelessRecipes shapeless = (ShapelessRecipes)recipe;
+			ArrayList input = new ArrayList();
+			
+			ItemStack output = shapeless.getRecipeOutput();
+			for(ItemStack from: fromList) {		
 				for(Object o: shapeless.recipeItems) {
 					if(!(o instanceof ItemStack)) { input.add(o); continue; }
 					ItemStack is = (ItemStack)o;
-					if(equal(is, (ItemStack)from, ignoreMeta)) {
-						input.add((ItemStack)to);
+					if(equal(is, from, ignoreMeta)) {
+						input.add(to);
 						changed = true;
 					} else input.add(o);
 				}
 				
-				// Correct output
-				ItemStack output = shapeless.getRecipeOutput();
-				if(equal(output, (ItemStack)from, ignoreMeta)) { output = (ItemStack)to; changed = true; }
-				
-				if(changed) newRecipe = new ShapelessRecipes(output, input);
+				if(equal(output, from, ignoreMeta)) { output = to; changed = true; }
 			}
-		}
-		if(recipe instanceof ShapedOreRecipe) {
+			
+			if(changed) {
+				newRecipe = new ShapelessRecipes(output, input);
+			}
+		} else if(recipe instanceof ShapedOreRecipe) {
 			ShapedOreRecipe shaped = (ShapedOreRecipe)recipe;
 			
 			// Correct input - changing via array change is documented here
 			Object[] input = shaped.getInput();
 			for(int i = 0; i < input.length; i++) {
-				if(equal(input[i], from, ignoreMeta)) input[i] = (ItemStack)to;
+				if(_from instanceof String && equal(input[i], (String)_from, ignoreMeta)) input[i] = _to;
+				else for(ItemStack is: fromList) {
+					if(equal(input[i], is, ignoreMeta)) input[i] = _to;
+				}
 			}
 			
 			// Correct output
 			ItemStack output = shaped.getRecipeOutput();
-			if(to instanceof ItemStack && equal(output, from, ignoreMeta)) {
+			if(_from instanceof String && equal(output, (String)_from, ignoreMeta)) {
 				output = (ItemStack)to;
 				// Reflection!
 				try {
@@ -93,6 +108,15 @@ public class CraftingTweaker {
 				} catch(Exception e) { e.printStackTrace(); }
 			}
 			
+			for(ItemStack from: fromList) {
+				if(equal(output, from, ignoreMeta)) {
+					output = (ItemStack)to;
+					// Reflection!
+					try {
+						shaped.getClass().getField("output").set(shaped, output);
+					} catch(Exception e) { e.printStackTrace(); }
+				}
+			}
 		} else if(recipe instanceof ShapelessOreRecipe) {
 			ShapelessOreRecipe shapeless = (ShapelessOreRecipe)recipe;
 			ArrayList input = shapeless.getInput();
@@ -100,15 +124,27 @@ public class CraftingTweaker {
 			// Correct input
 			for(int i = 0; i < input.size(); i++) {
 				Object o = input.get(i);
-				if(equal(o, from, ignoreMeta)) {
-					input.set(i, to);
+				if(_from instanceof String && equal(o, (String)_from, ignoreMeta)) {
+					input.set(i, _to);
 					changed = true;
+				} else for(ItemStack is: fromList) {
+					if(equal(o, is, ignoreMeta)) {
+						input.set(i, _to);
+						changed = true;
+					}
 				}
 			}
 			
 			// Correct output
 			ItemStack output = shapeless.getRecipeOutput();
-			if(to instanceof ItemStack && equal(output, from, ignoreMeta)) { output = (ItemStack)to; changed = true; }
+			if(_from instanceof String && equal(output, (String)_from, ignoreMeta)) {
+				output = (ItemStack)to; changed = true;
+			}
+			for(ItemStack from : fromList) {
+				if(equal(output, from, ignoreMeta)) {
+					output = (ItemStack)to; changed = true;
+				}
+			}
 			
 			if(changed) newRecipe = new ShapelessOreRecipe(output, input);
 		}

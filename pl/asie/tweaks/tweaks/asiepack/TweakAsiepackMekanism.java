@@ -1,4 +1,4 @@
-package pl.asie.tweaks.tweaks;
+package pl.asie.tweaks.tweaks.asiepack;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -8,9 +8,10 @@ import mekanism.api.RecipeHelper;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.registry.GameRegistry;
 import pl.asie.tweaks.api.TweakBase;
+import pl.asie.tweaks.tweaks.TweakBaseConfig;
 
-public class TweakMekanismTweaks extends TweakBaseConfig {
-	public TweakMekanismTweaks() {
+public class TweakAsiepackMekanism extends TweakBaseConfig {
+	public TweakAsiepackMekanism() {
 		super();
 		
 		removeBlock("Mekanism", "Generator");
@@ -32,7 +33,7 @@ public class TweakMekanismTweaks extends TweakBaseConfig {
 	
 	@Override
 	public String getConfigKey() {
-		return "mekanismTweaks";
+		return "asiepackRecipes";
 	}
 
 	@Override

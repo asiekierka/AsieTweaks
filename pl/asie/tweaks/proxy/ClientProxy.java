@@ -7,7 +7,6 @@ import net.minecraft.client.gui.achievement.GuiAchievement;
 import net.minecraftforge.common.MinecraftForge;
 import pl.asie.tweaks.AsieTweaks;
 import pl.asie.tweaks.gui.GuiAchievementHidden;
-import pl.asie.tweaks.skin.SkinHandler;
 import pl.asie.tweaks.ShoutKeyHandler;
 
 public class ClientProxy extends CommonProxy {
@@ -30,12 +29,6 @@ public class ClientProxy extends CommonProxy {
 	@Override
 	public boolean isClient() { return true; }
 	
-	public void setSkin(String a, String b) {
-		SkinHandler.setup(a, b);
-	}
-	public void invalidateAll() {
-		SkinHandler.invalidateAll();
-	}
 	public void addShoutBinding() {
 		TickRegistry.registerTickHandler(new ShoutKeyHandler(), Side.CLIENT);
 	}

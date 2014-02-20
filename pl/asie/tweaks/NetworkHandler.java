@@ -5,7 +5,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 
-import pl.asie.tweaks.skin.SkinHandler;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.NetLoginHandler;
 import net.minecraft.network.packet.NetHandler;
@@ -27,16 +26,7 @@ public class NetworkHandler implements IPacketHandler, IConnectionHandler {
 			int commandType = packetData.readUnsignedByte();
 			System.out.println("Received packet, command " + commandType);
 			switch(commandType) {
-				case 1: { // Reload player skin
-					String playerName = packetData.readUTF();
-					SkinHandler.invalidate(playerName, true);
-				} break;
-				case 2: { // Set skin/cape URLs
-					String skinURL = packetData.readUTF();
-					String capeURL = packetData.readUTF();
-					AsieTweaks.proxy.setSkin(skinURL, capeURL);
-					AsieTweaks.proxy.invalidateAll();
-				} break;
+				default: break;
 			}
 		}
 		catch(Exception e) { e.printStackTrace(); }
@@ -45,15 +35,6 @@ public class NetworkHandler implements IPacketHandler, IConnectionHandler {
     @Override
     public void playerLoggedIn(Player player, NetHandler netHandler,
                     INetworkManager manager) {
-            // Send skin and cape URLs
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		DataOutputStream data = new DataOutputStream(baos);
-		try {
-			data.writeByte((byte)2);
-			data.writeUTF(AsieTweaks.skinURL);
-			data.writeUTF(AsieTweaks.capeURL);
-			PacketDispatcher.sendPacketToPlayer(new Packet250CustomPayload("AsieTweaks", baos.toByteArray()), player);
-		} catch(Exception e) { e.printStackTrace(); }
     }
 
 	@Override

@@ -1,5 +1,6 @@
-package pl.asie.tweaks.item.mekanism;
+package pl.asie.tweaks.item;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -20,6 +21,7 @@ public class ItemGear extends Item {
 	private String[] names;
 	private int[] colors;
 	private int arrayLength = 0;
+	private HashMap<String, ItemStack> stacks = new HashMap<String, ItemStack>();
 	
 	public ItemGear(int id) {
 		super(id);
@@ -30,6 +32,7 @@ public class ItemGear extends Item {
 	}
 	
 	public int addGear(int color, String name, String recipeName, String recipeBase, String recipeMaterial) {
+		stacks.put(recipeName, new ItemStack(this, 1, arrayLength));
 		LanguageRegistry.instance().addStringLocalization("item.asietweaks." + recipeName + ".name", name);
 		OreDictionary.registerOre(recipeName, new ItemStack(this, 1, arrayLength));
 		if(recipeBase != null)
@@ -58,5 +61,10 @@ public class ItemGear extends Item {
 		for(int i = 0; i < arrayLength; i++) {
 			list.add(new ItemStack(this.itemID, 1, i));
 		}
+	}
+
+	public Object getGearStack(String string) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
